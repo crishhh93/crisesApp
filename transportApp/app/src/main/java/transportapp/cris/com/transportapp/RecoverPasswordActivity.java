@@ -36,7 +36,7 @@ public class RecoverPasswordActivity extends AppCompatActivity {
             {
                 String emailAddr = email.getText().toString();
                 User user = userDataSource.getUserForEmailAddress(emailAddr);
-                if (emailAddr.length() >=0 && NewAccountActivity.isValidEmail(emailAddr) && user != null) {
+                if (emailAddr.length() >=0 /*&& NewAccountActivity.isValidEmail(emailAddr)*/ && user != null) {
                     try {
                         GMailSender sender = new GMailSender("username@gmail.com", "password");
                         sender.sendMail("PasswordRecovery RATT",

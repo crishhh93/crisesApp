@@ -1,5 +1,11 @@
 package transportapp.cris.com.transportapp;
 
+import android.app.ExpandableListActivity;
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by Cristiana on 1/9/2016.
  */
@@ -49,8 +55,21 @@ public class User {
         this.password = password;
     }
 
-    @Override
-    public String toString() {
-        return "Nume = " + firstName + " Prenume = " + lastName + " Password = " + password + " Email = " + emailAdr;
+    public JSONObject getJsonObj(){
+
+        JSONObject obj = new JSONObject();
+
+        try {
+            obj.put("user_firstName", firstName);
+            obj.put("user_lastName", lastName);
+            obj.put("user_email", emailAdr);
+            obj.put("user_email", password);
+        }
+        catch (JSONException e)
+        {
+            Log.d("transportApp", "JSONException");
+        }
+
+        return obj;
     }
 }
