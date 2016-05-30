@@ -1,12 +1,10 @@
 package transportapp.cris.com.transportapp;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -16,71 +14,163 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request.Method;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.SQLException;
-import java.util.Iterator;
-import java.util.List;
-
-import java.io.IOException;
-import java.io.IOException.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NewAccountActivity extends AppCompatActivity {
 
-    //private UserDataSource userDataSource;
-    protected EditText lastName, firstName, emailAdr, password, passwordCheck;
+    private static final String TAG = NewAccountActivity.class.getSimpleName();
+    private Button btnRegister;
+    private EditText enteredLastName, enteredFirstName, enteredEmailAdr, enteredPassword, enteredPasswordCheck;
+    private ProgressDialog pDialog;
+    private SessionManager session;
+    private DatabaseHandler db;
 
-    protected String enteredLastName, enteredFirstName, enteredEmailAdr, enteredPassword, enteredPasswordCheck;
-    //private final String serverUrl = "http://10.0.2.2/adminratt/index.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_account);
-    }
 
-    public void registerButton(View view) {
 
-        if (view.getId() == R.id.btn_register) {
+        enteredLastName = (EditText) findViewById(R.id.et_lastName);
+        enteredFirstName = (EditText) findViewById(R.id.et_firstName);
+        enteredEmailAdr = (EditText) findViewById(R.id.et_emailAdrReg);
+        enteredPassword = (EditText) findViewById(R.id.et_passwordReg);
+        enteredPasswordCheck = (EditText) findViewById(R.id.et_passwordRegCheck);
 
-            EditText lastName, firstName, emailAdr, password, passwordCheck;
+        pDialog = new ProgressDialog(this);
+        pDialog.setCancelable(false);
 
-            lastName = (EditText) findViewById(R.id.et_lastName);
-            firstName = (EditText) findViewById(R.id.et_firstName);
-            emailAdr = (EditText) findViewById(R.id.et_emailAdrReg);
-            password = (EditText) findViewById(R.id.et_passwordReg);
-            passwordCheck = (EditText) findViewById(R.id.et_passwordRegCheck);
+        session = new SessionManager(getApplicationContext());
 
-            if (lastName != null && firstName != null && emailAdr != null && password != null && passwordCheck != null) {
+        db = new DatabaseHandler(getApplicationContext());
 
-                String lastNameStr = lastName.getText().toString();
-                String firstNameStr = firstName.getText().toString();
-                String emailAdrStr = emailAdr.getText().toString();
-                String passwordStr = password.getText().toString();
-                String passwordCheckStr = passwordCheck.getText().toString();
+        if(session.isLoggedIn()){
 
-                if (lastNameStr.length() > 0 && firstNameStr.length() > 0 && emailAdrStr.length() > 0 && passwordStr.length() > 0 && isValidEmail(emailAdrStr)) {
+            Intent intent = new Intent(NewAccountActivity.this,ClientActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
-                    if (passwordStr.equals(passwordCheckStr)) {
+        btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-                        User newUser = new User(lastNameStr, firstNameStr, emailAdrStr, passwordStr);
-                        JSONObject jsonNewUser = newUser.getJsonObj();
+                String lastName = enteredLastName.getText().toString().trim();
+                String firstName = enteredFirstName.getText().toString().trim();
+                String email = enteredEmailAdr.getText().toString().trim();
+                String password = enteredPassword.getText().toString().trim();
 
-                        Intent syncInfo = new Intent(this, SyncInformationService.class);
-                        syncInfo.putExtra("NewUser", jsonNewUser.toString());
-                        Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show();
-                        finish();
-
-                    } else {
-                        Toast.makeText(this, "Parolele nu se potrivesc!", Toast.LENGTH_SHORT).show();
-                    }
-
+                if (!lastName.isEmpty() && !firstName.isEmpty() && !email.isEmpty() && !password.isEmpty()) {
+                    registerUser(lastName, firstName , email, password);
                 } else {
-                    Toast.makeText(this, "Parametrii incorecti", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),
+                            "Please enter your details!", Toast.LENGTH_LONG)
+                            .show();
                 }
             }
-        }
+        });
     }
+
+    private void registerUser(final String lastName, final String firstName, final String email, final String password) {
+
+        String tag_string_req = "req_register";
+
+        pDialog.setMessage("Registering ...");
+        showDialog();
+
+        StringRequest strReq = new StringRequest(Method.POST,
+                Constants.REGISTER_URL, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Register Response: " + response.toString());
+                hideDialog();
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+                    if (!error) {
+
+                        String uid = jObj.getString("uid");
+
+                        JSONObject user = jObj.getJSONObject("userid");
+                        String lastname = user.getString("lastname");
+                        String firstname = user.getString("firstname");
+                        String email = user.getString("email");
+                        String created_at = user.getString("createdat");
+
+                        db.addUser(lastname, firstname,email, uid, created_at);
+
+                        Toast.makeText(getApplicationContext(), "User successfully registered. Try login now!", Toast.LENGTH_LONG).show();
+
+                        // Launch login activity
+                        Intent intent = new Intent(
+                                NewAccountActivity.this,
+                                LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+
+                        // Error occurred in registration. Get the error
+                        // message
+                        String errorMsg = jObj.getString("error_msg");
+                        Toast.makeText(getApplicationContext(),
+                                errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Registration Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+                hideDialog();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting params to register url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("lastName", lastName);
+                params.put("firstName", firstName);
+                params.put("email", email);
+                params.put("password", password);
+
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        AppController.getmInstance().addToRequestQueue(strReq, tag_string_req);
+    }
+
+    private void showDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }
+
+    private void hideDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
+    }
+
 
     public final static boolean isValidEmail (CharSequence target){
         if (target == null) {

@@ -6,6 +6,8 @@ package transportapp.cris.com.transportapp;
 public class Constants {
 
     public static final String BASE_URL = "http://192.168.0.103/api.php";
+    public static final String LOGIN_URL = "http://192.168.0.103/login.php";
+    public static final String REGISTER_URL = "http://192.168.0.103/register.php";
     //Operatiile pe care o sa le fac in baza de date
     public static final String LOGIN_OPERATION = "login";
     public static final String REGISTER_OPERATION = "register";

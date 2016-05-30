@@ -35,7 +35,7 @@ public class SyncInformationService extends IntentService {
 
         HttpURLConnection conn;
         try {
-            URL url = new URL("http://192.168.0.103/api.php");
+            URL url = new URL(Constants.BASE_URL);
 
             HttpURLConnection connection = (HttpURLConnection)url.openConnection();
             String urlParameters = "users=" + jsonString;

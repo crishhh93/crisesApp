@@ -25,5 +25,10 @@
     <string name="text_view_buy_ticket">Achizitioneaza bilet</string>
     <string name="radio_button_tramvai">Tramvai</string>
     <string name="radio_button_express">Express</string>
+    <string name="client_menu_user_profie">Profil utilizator</string>
+    <string name="client_menu_payment_history">Istoricul plati</string>
+    <string name="client_menu_exit_app">Delogare</string>
+    <string name="title_activity_client1">Client1Activity</string>
+    <string name="title_activity_one_fragment">OneFragment</string>
 
 </resources>

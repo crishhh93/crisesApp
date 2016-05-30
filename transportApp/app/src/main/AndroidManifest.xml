@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name= ".AppController"
         android:allowBackup="true"
         android:icon="@drawable/iconrapp"
         android:label="@string/app_name"
@@ -39,7 +40,8 @@
 
         <service
             android:name=".SyncInformationService"
-            android:exported="false"></service>
+            android:exported="false" />
+
     </application>
 
 </manifest>
