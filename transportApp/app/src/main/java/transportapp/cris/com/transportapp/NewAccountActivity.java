@@ -46,6 +46,7 @@ public class NewAccountActivity extends AppCompatActivity {
         enteredEmailAdr = (EditText) findViewById(R.id.et_emailAdrReg);
         enteredPassword = (EditText) findViewById(R.id.et_passwordReg);
         enteredPasswordCheck = (EditText) findViewById(R.id.et_passwordRegCheck);
+        btnRegister = (Button)findViewById(R.id.btn_register);
 
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);

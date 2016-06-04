@@ -8,7 +8,6 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/blurred_bck"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".LoginActivity">
 
@@ -85,7 +84,6 @@
         android:text="@string/text_view_create_new_account"
         android:textStyle="bold"
         android:id="@+id/tv_NewAcc"
-        android:onClick="mkNewAccount"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="30dp" />

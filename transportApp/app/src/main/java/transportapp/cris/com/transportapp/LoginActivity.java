@@ -54,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         TextView newAcc = (TextView) findViewById(R.id.tv_NewAcc);
         newAcc.setPaintFlags(newAcc.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
+
         enteredEmail = (EditText) findViewById(R.id.et_Username);
         enteredPassword = (EditText) findViewById(R.id.et_Password);
         loginButton = (Button) findViewById(R.id.btn_login);
@@ -72,6 +73,7 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override

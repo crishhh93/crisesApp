@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,58 +10,55 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    android:background="@drawable/blurred_bck"
     tools:context="transportapp.cris.com.transportapp.ClientActivity">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Cumpara"
-        android:textAllCaps="false"
-        android:id="@+id/btn_buyTicket"
-        android:onClick="buyTicket"
-        android:layout_below="@+id/radioGroup"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="42dp" />
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_horizontal_ntb"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/text_view_buy_ticket"
-        android:id="@+id/textView2"
-        android:layout_marginBottom="85dp"
-        android:layout_above="@+id/radioGroup"
-        android:layout_centerHorizontal="true" />
-
-    <RadioGroup
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:id="@+id/radioGroup"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true">
+        android:background="#00000000">
 
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/radio_button_tramvai"
-        android:id="@+id/rbtn_tramvai"
-        android:layout_marginBottom="69dp"
-        android:checked="false"
-        android:layout_above="@+id/radioButton2"
-        android:layout_centerHorizontal="true" />
+        <FrameLayout
+            android:id="@+id/wrapper_ntb_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways">
 
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/radio_button_express"
-        android:id="@+id/rbtn_express"
-        android:checked="false"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-</RadioGroup>
+            <View
+                android:id="@+id/bg_ntb_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_gravity="top"
+                android:background="#605271" />
+
+            <com.gigamole.library.NavigationTabBar
+                android:id="@+id/ntb_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                app:ntb_badge_bg_color="#ffff0000"
+                app:ntb_badge_gravity="bottom"
+                app:ntb_badge_position="left"
+                app:ntb_badge_title_color="#ffffffff"
+                app:ntb_badge_use_typeface="true"
+                app:ntb_badged="true"
+                app:ntb_scaled="false"
+                app:ntb_title_mode="active"
+                app:ntb_titled="true"
+                app:ntb_typeface="fonts/agency.ttf" />
+
+        </FrameLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <View
+        android:id="@+id/mask"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_gravity="bottom" />
 
 </RelativeLayout>

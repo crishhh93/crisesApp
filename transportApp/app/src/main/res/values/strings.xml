@@ -30,5 +30,8 @@
     <string name="client_menu_exit_app">Delogare</string>
     <string name="title_activity_client1">Client1Activity</string>
     <string name="title_activity_one_fragment">OneFragment</string>
+    <string name = "primary_drawer_item1">Profilul meu</string>
+    <string name = "primary_drawer_item2">Ajutor</string>
+    <string name = "primary_drawer_item3">Iesire</string>
 
 </resources>
