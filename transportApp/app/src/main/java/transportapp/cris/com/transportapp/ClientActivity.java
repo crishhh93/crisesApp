@@ -128,11 +128,11 @@ public class ClientActivity extends AppCompatActivity {
                     View view = null;
                     if (position == 0) {
                         // Order Layout
-                        //TODO replae it with your own layout
                         view = LayoutInflater.from(
                                 getBaseContext()).inflate(R.layout.order_layout, null, false);
                     } else if (position == 1) {
                         // History list layout
+                        //ToDo change layout name
                         view = LayoutInflater.from(
                                 getBaseContext()).inflate(R.layout.item_vp_list, null, false);
                         final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.rv);
@@ -156,7 +156,6 @@ public class ClientActivity extends AppCompatActivity {
         final NavigationTabBar navigationTabBar = (NavigationTabBar) findViewById(R.id.ntb_horizontal);
         final ArrayList<NavigationTabBar.Model> models = new ArrayList<>();
         models.add(
-                //ToDo: change icon here
                 new NavigationTabBar.Model.Builder(
                         getResources().getDrawable(R.drawable.ic_payment_black_36dp),
                         Color.parseColor(colors[0]))
